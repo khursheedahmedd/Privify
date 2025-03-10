@@ -2,3 +2,5 @@
 node_modules
 testing
 processed
+path
+venv
