@@ -1,0 +1,5 @@
+flask
+exifread
+opencv-python-headless
+pillow
+numpy
