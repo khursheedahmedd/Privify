@@ -25,7 +25,7 @@ export default function Home() {
       const formData = new FormData()
       formData.append('file', selectedFile)
 
-      const response = await fetch('http://localhost:5000/metadata/scan', {
+      const response = await fetch('http://127.0.0.1:5000/metadata/scan', {
         method: 'POST',
         body: formData,
       })
@@ -50,7 +50,7 @@ export default function Home() {
       const formData = new FormData()
       formData.append('file', selectedFile)
 
-      const response = await fetch('http://localhost:5000/privacy/filter', {
+      const response = await fetch(' http://127.0.0.1:5000/privacy/filter', {
         method: 'POST',
         body: formData,
       })
@@ -80,7 +80,7 @@ export default function Home() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <h1 className="text-3xl font-bold mb-4">Welcome to PrivacyTool</h1>
+        <h1 className="text-3xl font-bold mb-4">Welcome to Privify</h1>
         <p className="mb-6 text-gray-600">
           Upload an image to scan its metadata or blur sensitive details.
         </p>
