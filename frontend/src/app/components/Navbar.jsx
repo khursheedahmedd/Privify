@@ -1,99 +1,54 @@
-"use client";
-import { useState } from "react";
-import Link from "next/link";
-import { FiMenu, FiX } from "react-icons/fi";
+'use client'
+
+import React, { useState } from 'react'
+import { motion } from 'framer-motion'
+import Link from 'next/link'
 
 const Navbar = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false)
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen)
+  }
 
   return (
-    <nav className="bg-black text-white py-4 px-6 flex justify-between items-center shadow-lg">
-      {/* Logo */}
-      <div className="text-2xl font-bold tracking-wide hover:text-green-400 transition duration-300">
-        <Link href="/" className="inline-block">Privify</Link>
+    <nav className="w-full shadow p-4 flex items-center justify-between">
+      <div className="text-xl font-bold">
+        <Link href="/">PrivacyTool</Link>
       </div>
-
-      {/* Centered Navbar Items */}
-      <ul className="hidden md:flex flex-1 justify-center space-x-16 text-lg">
-        <li>
-          <Link
-            href="/"
-            className="inline-block transform transition duration-300 hover:text-green-400 hover:scale-110"
-          >
-            Home
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/scan"
-            className="inline-block transform transition duration-300 hover:text-green-400 hover:scale-110"
-          >
-            Scan
-          </Link>
-        </li>
-        <li>
-          <Link
-            href="/results"
-            className="inline-block transform transition duration-300 hover:text-green-400 hover:scale-110"
-          >
-            Results
-          </Link>
-        </li>
-      </ul>
-
-      {/* Mobile Menu Button */}
-      <button
-        className="md:hidden text-3xl focus:outline-none transition duration-300"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        {isOpen ? <FiX /> : <FiMenu />}
-      </button>
-
-      {/* Mobile Dropdown Menu */}
-      <div
-        className={`fixed top-0 left-0 w-full h-screen bg-black transition-transform duration-500 ${
-          isOpen ? "translate-x-0" : "-translate-x-full"
-        } md:hidden`}
-      >
-        <button
-          className="absolute top-6 right-6 text-3xl text-white focus:outline-none"
-          onClick={() => setIsOpen(false)}
-        >
-          <FiX />
+      {/* Hamburger Menu (Mobile) */}
+      <div className="md:hidden">
+        <button onClick={toggleMenu}>
+          <span className="material-icons">menu</span>
         </button>
-
-        <ul className="flex flex-col items-center justify-center h-full space-y-8 text-2xl">
-          <li>
-            <Link
-              href="/"
-              className="inline-block transform transition duration-300 hover:text-green-400 hover:scale-110"
-              onClick={() => setIsOpen(false)}
-            >
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/scan"
-              className="inline-block transform transition duration-300 hover:text-green-400 hover:scale-110"
-              onClick={() => setIsOpen(false)}
-            >
-              Scan
-            </Link>
-          </li>
-          <li>
-            <Link
-              href="/results"
-              className="inline-block transform transition duration-300 hover:text-green-400 hover:scale-110"
-              onClick={() => setIsOpen(false)}
-            >
-              Results
-            </Link>
-          </li>
-        </ul>
       </div>
-    </nav>
-  );
-};
 
-export default Navbar;
+      {/* Desktop Menu */}
+      <div className="hidden md:flex space-x-6">
+        <Link href="/">Home</Link>
+        <Link href="/contact">Contact</Link>
+      </div>
+
+      {/* Mobile Menu (Framer Motion) */}
+      {isOpen && (
+        <motion.div
+          initial={{ x: '100%' }}
+          animate={{ x: 0 }}
+          exit={{ x: '100%' }}
+          transition={{ duration: 0.3 }}
+          className="fixed top-0 right-0 w-2/3 h-full bg-white shadow-md p-4 md:hidden"
+        >
+          <button onClick={toggleMenu} className="mb-4">
+            <span className="material-icons">close</span>
+          </button>
+          <div className="flex flex-col space-y-4">
+            <Link href="/" onClick={toggleMenu}>Home</Link>
+            <Link href="/contact" onClick={toggleMenu}>Contact</Link>
+          </div>
+        </motion.div>
+      )}
+    </nav>
+  )
+}
+
+export default Navbar
