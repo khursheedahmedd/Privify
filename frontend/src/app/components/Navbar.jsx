@@ -10,7 +10,7 @@ const Navbar = () => {
     <nav className="bg-black text-white py-4 px-6 flex justify-between items-center shadow-lg">
       {/* Logo */}
       <div className="text-2xl font-bold tracking-wide hover:text-green-400 transition duration-300">
-        <Link href="/" className="inline-block">Overshare 2.0</Link>
+        <Link href="/" className="inline-block">Privify</Link>
       </div>
 
       {/* Centered Navbar Items */}

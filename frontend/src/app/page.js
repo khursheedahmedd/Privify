@@ -15,7 +15,7 @@ export default function HomePage() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-[#0a0f1a] to-black text-white px-6">
       <h1 className="text-5xl font-extrabold mb-6 text-center animate-fade-in">
-        Secure Your Privacy with <span className="text-blue-500">Overshare</span>
+        Secure Your Privacy with <span className="text-blue-500">Privify</span>
       </h1>
       <p className="text-gray-300 text-lg mb-8 text-center max-w-2xl animate-fade-in">
         Upload an image, let AI scan for privacy threats, and get instant results.
