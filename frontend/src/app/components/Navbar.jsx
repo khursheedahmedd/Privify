@@ -14,7 +14,7 @@ const Navbar = () => {
   return (
     <nav className="w-full shadow p-4 flex items-center justify-between">
       <div className="text-xl font-bold">
-        <Link href="/">PrivacyTool</Link>
+        <Link href="/">Privify</Link>
       </div>
       {/* Hamburger Menu (Mobile) */}
       <div className="md:hidden">
