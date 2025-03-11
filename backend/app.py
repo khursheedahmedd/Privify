@@ -1,21 +1,23 @@
 import logging
 from flask import Flask
+from flask_cors import CORS
 from routes.metadata_routes import metadata_bp
 from routes.privacy_filter_routes import privacy_filter_bp
 
-# Configure the root logger
 logging.basicConfig(
-    level=logging.INFO,  # You can switch to DEBUG for more detailed logs
+    level=logging.INFO,
     format='%(asctime)s [%(levelname)s] %(name)s - %(message)s'
 )
-
-# Create a logger for the main application
 logger = logging.getLogger(__name__)
 
 def create_app():
     app = Flask(__name__)
 
-    # Register the blueprints
+    # Enable CORS for all routes, allowing requests from http://localhost:3000
+    # You can restrict origins if you only trust certain domains
+    CORS(app, resources={r"*": {"origins": "http://localhost:3000"}})
+
+    # Register blueprints
     app.register_blueprint(metadata_bp, url_prefix='/metadata')
     app.register_blueprint(privacy_filter_bp, url_prefix='/privacy')
 
