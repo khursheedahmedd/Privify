@@ -15,7 +15,7 @@ def create_app():
 
     # Enable CORS for all routes, allowing requests from http://localhost:3000
     # You can restrict origins if you only trust certain domains
-    CORS(app, resources={r"*": {"origins": "http://localhost:3000"}})
+    CORS(app, resources={r"*": {"origins": "*"}})
 
     # Register blueprints
     app.register_blueprint(metadata_bp, url_prefix='/metadata')
