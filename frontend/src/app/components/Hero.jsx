@@ -264,12 +264,12 @@ export default function Home() {
               )}
 
               {/* Raw Metadata Display */}
-              <div className="mt-6">
+              {/* <div className="mt-6">
                 <h3 className="text-lg font-bold mb-4">Full Metadata</h3>
                 <pre className="text-sm whitespace-pre-wrap bg-gray-50 p-4 rounded-lg">
                   {JSON.stringify(metadata, null, 2)}
                 </pre>
-              </div>
+              </div> */}
             </div>
           </motion.div>
         )}
