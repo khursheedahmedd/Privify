@@ -22,6 +22,14 @@ def create_app():
     app.register_blueprint(privacy_filter_bp, url_prefix='/privacy')
 
     logger.info("Flask app has been created and blueprints have been registered.")
+    logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] %(name)s - %(message)s',
+    handlers=[
+        logging.FileHandler("debug.log"),
+        logging.StreamHandler()
+    ]
+)
     return app
 
 if __name__ == '__main__':
