@@ -1,8 +1,6 @@
 'use client'
 
 import React, { useState } from 'react'
-import Navbar from '@/app/components/Navbar'
-import Footer from '@/app/components/Footer'
 import { motion, AnimatePresence } from 'framer-motion'
 import { EnvelopeIcon, PhoneIcon, MapPinIcon } from '@heroicons/react/24/outline'
 
