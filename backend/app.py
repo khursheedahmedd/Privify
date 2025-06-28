@@ -15,13 +15,21 @@ def create_app():
 
     # Enable CORS for all routes, allowing requests from http://localhost:3000
     # You can restrict origins if you only trust certain domains
-    CORS(app, resources={r"*": {"origins": "http://localhost:3000"}})
+    CORS(app, resources={r"*": {"origins": "*"}})
 
     # Register blueprints
     app.register_blueprint(metadata_bp, url_prefix='/metadata')
     app.register_blueprint(privacy_filter_bp, url_prefix='/privacy')
 
     logger.info("Flask app has been created and blueprints have been registered.")
+    logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(asctime)s [%(levelname)s] %(name)s - %(message)s',
+    handlers=[
+        logging.FileHandler("debug.log"),
+        logging.StreamHandler()
+    ]
+)
     return app
 
 if __name__ == '__main__':

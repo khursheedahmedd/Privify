@@ -7,7 +7,7 @@ const NotFoundPage = () => {
   const router = useRouter();
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-scree bg-[#0a0f1a] text-white ">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white text-gray-800 ">
       <div className="text-center">
         <h1 className="text-4xl font-bold mt-8">Page Not Found</h1>
         <p className="mt-4 text-lg">
@@ -16,7 +16,7 @@ const NotFoundPage = () => {
         <div className="mt-8">
           <button
             onClick={() => router.back()}
-            className="px-6 py-2 rounded-full bg-purple-500 text-white hover:bg-purple-700 transition"
+            className="px-6 py-2 rounded-full cursor-pointer bg-indigo-600 text-white hover:bg-indigo-700 transition"
           >
             Go Back
           </button>
