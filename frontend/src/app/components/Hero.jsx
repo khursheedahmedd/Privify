@@ -4,6 +4,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import RiskAnalysis from "../components/RiskAnalysis";
 import MapWrapper from "../components/MapWrapper";
+import MetadataRemoval from "../components/MetadataRemoval";
 
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -14,6 +15,7 @@ export default function Home() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [riskAnalysis, setRiskAnalysis] = useState(null);
   const [showMap, setShowMap] = useState(false);
+  const [cleanImageUrl, setCleanImageUrl] = useState(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -25,6 +27,7 @@ export default function Home() {
     setProcessedImage(null);
     setRiskAnalysis(null);
     setShowMap(false);
+    setCleanImageUrl(null);
   };
 
   const handleCancel = () => {
@@ -35,6 +38,7 @@ export default function Home() {
     setProcessedImage(null);
     setRiskAnalysis(null);
     setShowMap(false);
+    setCleanImageUrl(null);
   };
 
   const simulateUploadProgress = useCallback(() => {
@@ -88,18 +92,18 @@ export default function Home() {
   const handlePrivacyFilter = async () => {
     if (!selectedFile) return;
     setLoading(true);
-    setProcessedImage(null);
+
     try {
       const formData = new FormData();
       formData.append("file", selectedFile);
 
-      const response = await fetch("http://127.0.0.1:5000/privacy/filter", {
+      const response = await fetch("http://localhost:5000/privacy/filter", {
         method: "POST",
         body: formData,
       });
-      if (!response.ok) {
-        throw new Error("Failed to apply privacy filter");
-      }
+
+      if (!response.ok) throw new Error("Processing failed");
+
       const blob = await response.blob();
       const objectURL = URL.createObjectURL(blob);
       setProcessedImage(objectURL);
@@ -109,6 +113,10 @@ export default function Home() {
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleCleanImageGenerated = (imageUrl, filename) => {
+    setCleanImageUrl(imageUrl);
   };
 
   return (
@@ -224,7 +232,7 @@ export default function Home() {
               {loading ? "Scanning..." : "Scan Metadata"}
             </motion.button>
 
-            <motion.button
+            {/* <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handlePrivacyFilter}
@@ -232,7 +240,7 @@ export default function Home() {
               className="px-8 py-3 bg-purple-600 cursor-pointer text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-700 transition-colors"
             >
               {loading ? "Processing..." : "Blur Sensitive Data"}
-            </motion.button>
+            </motion.button> */}
           </div>
         </div>
 
@@ -263,6 +271,13 @@ export default function Home() {
                 </motion.div>
               )}
 
+              {/* Metadata Removal Component */}
+              <MetadataRemoval
+                metadata={metadata}
+                selectedFile={selectedFile}
+                onCleanImageGenerated={handleCleanImageGenerated}
+              />
+
               {/* Raw Metadata Display */}
               {/* <div className="mt-6">
                 <h3 className="text-lg font-bold mb-4">Full Metadata</h3>
@@ -270,6 +285,44 @@ export default function Home() {
                   {JSON.stringify(metadata, null, 2)}
                 </pre>
               </div> */}
+            </div>
+          </motion.div>
+        )}
+
+        {cleanImageUrl && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="mt-12 bg-white flex items-center flex-col rounded-xl shadow-lg p-6"
+          >
+            <h2 className="text-2xl font-bold mb-4">
+              Clean Image (Metadata Removed)
+            </h2>
+            <img
+              src={cleanImageUrl}
+              alt="Clean image without metadata"
+              className="rounded-lg border shadow-sm max-w-full h-auto"
+            />
+            <div className="mt-4 flex flex-col sm:flex-row gap-4">
+              <button
+                onClick={() => {
+                  const link = document.createElement("a");
+                  link.href = cleanImageUrl;
+                  link.download = "clean_image.jpg";
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }}
+                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
+              >
+                Download Clean Image
+              </button>
+              <button
+                onClick={handleCancel}
+                className="px-6 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                Start Over
+              </button>
             </div>
           </motion.div>
         )}

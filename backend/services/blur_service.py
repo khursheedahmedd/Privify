@@ -1,25 +1,43 @@
-import cv2
+# services/blur_service.py
+import os
 import logging
+import requests
+import base64
 
 logger = logging.getLogger(__name__)
 
-# Load pre-trained face detection model globally
-face_cascade = cv2.CascadeClassifier(
-    cv2.data.haarcascades + 'haarcascade_frontalface_default.xml'
-)
+SEGMIND_API_KEY = os.getenv("SEGMIND_API_KEY")
+WORKFLOW_URL = "https://api.segmind.com/workflows/67a326c2d52cfa65374963ab-v4"
 
-def blur_faces(input_path, output_path):
-    logger.info("Blurring faces in file: %s", input_path)
-    image = cv2.imread(input_path)
-    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5)
+def remove_text_from_image(input_path, output_path, threshold=0.7):
+    """Process image directly using base64 encoding"""
+    try:
+        # 1. Read and encode image
+        with open(input_path, "rb") as image_file:
+            base64_image = base64.b64encode(image_file.read()).decode('utf-8')
 
-    logger.info("Detected %d face(s)", len(faces))
+        # 2. Call Segmind API with base64
+        response = requests.post(
+            WORKFLOW_URL,
+            headers={'x-api-key': SEGMIND_API_KEY},
+            json={
+                "input_image": f"data:image/jpeg;base64,{base64_image}",
+                "Threshold": str(threshold)
+            }
+        )
 
-    for (x, y, w, h) in faces:
-        face_roi = image[y:y+h, x:x+w]
-        blurred_face = cv2.GaussianBlur(face_roi, (99, 99), 30)
-        image[y:y+h, x:x+w] = blurred_face
+        # 3. Handle response
+        if response.status_code != 200:
+            logger.error(f"API Error {response.status_code}: {response.text}")
+            return False
 
-    cv2.imwrite(output_path, image)
-    logger.info("Output image with blurred faces saved to: %s", output_path)
+        # 4. Save processed image
+        with open(output_path, 'wb') as f:
+            f.write(response.content)
+            
+        logger.info(f"Processed image saved to {output_path}")
+        return True
+
+    except Exception as e:
+        logger.error(f"Text removal failed: {str(e)}")
+        return False
