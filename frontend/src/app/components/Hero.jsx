@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import RiskAnalysis from "../components/RiskAnalysis";
 import MapWrapper from "../components/MapWrapper";
 import MetadataRemoval from "../components/MetadataRemoval";
+import VisionAnalysis from "../components/VisionAnalysis";
+import MetadataCard from "../components/MetadataCard";
 
 export default function Home() {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -16,6 +18,7 @@ export default function Home() {
   const [riskAnalysis, setRiskAnalysis] = useState(null);
   const [showMap, setShowMap] = useState(false);
   const [cleanImageUrl, setCleanImageUrl] = useState(null);
+  const [visionResults, setVisionResults] = useState(null);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -28,6 +31,7 @@ export default function Home() {
     setRiskAnalysis(null);
     setShowMap(false);
     setCleanImageUrl(null);
+    setVisionResults(null);
   };
 
   const handleCancel = () => {
@@ -39,6 +43,7 @@ export default function Home() {
     setRiskAnalysis(null);
     setShowMap(false);
     setCleanImageUrl(null);
+    setVisionResults(null);
   };
 
   const simulateUploadProgress = useCallback(() => {
@@ -117,6 +122,10 @@ export default function Home() {
 
   const handleCleanImageGenerated = (imageUrl, filename) => {
     setCleanImageUrl(imageUrl);
+  };
+
+  const handleVisionAnalysisComplete = (results) => {
+    setVisionResults(results);
   };
 
   return (
@@ -227,9 +236,9 @@ export default function Home() {
               whileTap={{ scale: 0.95 }}
               onClick={handleMetadataScan}
               disabled={!selectedFile || loading}
-              className="px-8 py-3 bg-indigo-600 cursor-pointer text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-700 transition-colors"
+              className="px-8 py-3 bg-purple-600 cursor-pointer text-white rounded-lg font-medium disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-700 transition-colors"
             >
-              {loading ? "Scanning..." : "Scan Metadata"}
+              {loading ? "Scanning..." : "Scan Risk"}
             </motion.button>
 
             {/* <motion.button
@@ -255,6 +264,8 @@ export default function Home() {
             <div className="space-y-6">
               {/* Security Analysis */}
               <RiskAnalysis metadata={metadata} />
+              {/* Metadata Card */}
+              <MetadataCard metadata={metadata} />
 
               {/* Location Map */}
               {showMap && (
@@ -276,6 +287,12 @@ export default function Home() {
                 metadata={metadata}
                 selectedFile={selectedFile}
                 onCleanImageGenerated={handleCleanImageGenerated}
+              />
+
+              {/* Vision Analysis Component */}
+              <VisionAnalysis
+                selectedFile={selectedFile}
+                onAnalysisComplete={handleVisionAnalysisComplete}
               />
 
               {/* Raw Metadata Display */}

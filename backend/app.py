@@ -4,6 +4,7 @@ from flask_cors import CORS
 from routes.metadata_routes import metadata_bp
 from routes.privacy_filter_routes import privacy_filter_bp
 from routes.metadata_removal_routes import metadata_removal_bp
+from routes.vision_analysis_routes import vision_analysis_bp
 
 logging.basicConfig(
     level=logging.INFO,
@@ -22,6 +23,7 @@ def create_app():
     app.register_blueprint(metadata_bp, url_prefix='/metadata')
     app.register_blueprint(privacy_filter_bp, url_prefix='/privacy')
     app.register_blueprint(metadata_removal_bp, url_prefix='/metadata-removal')
+    app.register_blueprint(vision_analysis_bp, url_prefix='/vision')
 
     logger.info("Flask app has been created and blueprints have been registered.")
     logging.basicConfig(
