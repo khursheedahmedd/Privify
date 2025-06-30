@@ -3,7 +3,7 @@ from flask import Blueprint, request, jsonify, send_file
 import os
 import logging
 from config import UPLOAD_FOLDER, PROCESSED_FOLDER
-from services.blur_service import remove_text_from_image
+from services.content_blur_service import blur_service
 
 # Initialize the Blueprint FIRST
 privacy_filter_bp = Blueprint('privacy_filter', __name__)
@@ -34,7 +34,8 @@ def privacy_filter():
         file.save(input_path)
         
         logger.info("Processing image...")
-        if not remove_text_from_image(input_path, output_path):
+        # Use the new blur service to blur text regions
+        if not blur_service.blur_text_regions(input_path, output_path, intensity='medium'):
             return jsonify({'error': 'Text removal failed'}), 500
             
         return send_file(output_path, mimetype='image/jpeg')

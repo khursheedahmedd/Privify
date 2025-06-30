@@ -7,7 +7,7 @@ logger = logging.getLogger(__name__)
 
 def remove_metadata_from_image(input_path, output_path):
     """
-    Remove all EXIF metadata from an image while preserving image quality.
+    Remove all EXIF metadata from an image while preserving image quality and orientation.
     This function creates a clean copy of the image without any metadata.
     """
     logger.info("Starting metadata removal from: %s", input_path)
@@ -15,6 +15,8 @@ def remove_metadata_from_image(input_path, output_path):
     try:
         # Open the original image
         with Image.open(input_path) as img:
+            # Apply EXIF orientation before removing metadata
+            img = ImageOps.exif_transpose(img)
             # Convert to RGB if necessary (for JPEG compatibility)
             if img.mode in ('RGBA', 'LA', 'P'):
                 # Create a white background for transparent images
@@ -56,7 +58,7 @@ def remove_metadata_from_image(input_path, output_path):
 
 def remove_specific_metadata(input_path, output_path, metadata_types=None):
     """
-    Remove specific types of metadata while keeping others.
+    Remove specific types of metadata while keeping others. Preserves orientation.
     
     Args:
         input_path: Path to input image
@@ -70,6 +72,8 @@ def remove_specific_metadata(input_path, output_path, metadata_types=None):
     
     try:
         with Image.open(input_path) as img:
+            # Apply EXIF orientation before removing metadata
+            img = ImageOps.exif_transpose(img)
             # Get existing EXIF data
             exif_data = img._getexif()
             
