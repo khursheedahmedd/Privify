@@ -31,7 +31,7 @@ For licensing, partnership, or commercial inquiries, please contact:
 ## Acknowledgements
 
 - [Next.js](https://nextjs.org/)
-- [Flask](https://flask.palletsprojects.com/)
+- [Flask](https://flask.palletsprojects.com/) 
 - [Groq](https://groq.com/)
 - [Pillow](https://python-pillow.org/)
 - [Leaflet](https://leafletjs.com/)
